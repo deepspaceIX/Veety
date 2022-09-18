@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "moros.c"
+#include "veety.c"
 
 int main() {
   int i;
