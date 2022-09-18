@@ -16,14 +16,6 @@ char g_win_current_window[100];
 int workspace = 0;
 int disableBack = 0;
 
-void disableBackFucntion() {
-  disableBack = 1;
-}
-
-int getWorkspace() {
-  return workspace;
-}
-
 int isEven(int num) {
   if (num % 2 == 0)
     return 4;
@@ -126,6 +118,14 @@ void clearCharacterMemory() {
   for (i = 0; i < 5000; ++i)
     g_cursor_clickpoints[i] = 0;
   g_win_characters_count = 0;
+}
+
+void disableBackFucntion() {
+  disableBack = 1;
+}
+
+int getWorkspace() {
+  return workspace;
 }
 
 //Shelly functions

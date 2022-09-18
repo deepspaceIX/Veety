@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include "veety.c"
-
 int main() {
   int i;
-  printf("help");
-  int workspace = getWorkspace();
   for (i = 0; i >= i; i++) {
+    int workspace = getWorkspace();
     startMoros();
     if (workspace == 1) {
       drawString("GRAPHING PROGRAM 200", 21, 11, 0);
