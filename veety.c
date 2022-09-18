@@ -13,8 +13,16 @@ char g_win_character_cords[20000];
 char g_cursor_clickpoints[5000];
 int g_win_characters_count = 0;
 char g_win_current_window[100];
-extern int workspace = 0;
-extern int disableBack = 0;
+int workspace = 0;
+int disableBack = 0;
+
+void disableBackFucntion() {
+  disableBack = 1;
+}
+
+int getWorkspace() {
+  return workspace;
+}
 
 int isEven(int num) {
   if (num % 2 == 0)
