@@ -3,7 +3,8 @@
 
 int main() {
   int i;
-  workspace = getWorkspace();
+  printf("help");
+  int workspace = getWorkspace();
   for (i = 0; i >= i; i++) {
     startMoros();
     if (workspace == 1) {
