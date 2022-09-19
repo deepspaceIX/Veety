@@ -13,6 +13,7 @@ int main() {
     } else {
       button(25, 6, "GRAPH");
       drawString("Testing", 1, 1, 0);
+      drawLine(1, 0);
     }
     window(50, 26, "Moros");
     getInput();

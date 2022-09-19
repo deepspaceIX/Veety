@@ -128,6 +128,23 @@ int getWorkspace() {
   return workspace;
 }
 
+void drawLine(slope, intercept) {
+  char lineCharacter = '+';
+  if (slope==0) {
+    lineCharacter = '|';
+  } else if (slope < 0) {
+    lineCharacter = '\\';
+  } else if (slope > 0) {
+    lineCharacter = '/';
+  }
+  printf("%d", g_win_sizeY);
+  int i;
+  for (i=0; i<=g_win_sizeY; i++) {
+    int yCord = (i*slope) + intercept;
+    drawCharacter(lineCharacter, i, yCord, 0);
+  } 
+}
+
 //Shelly functions
 void window(int sizeX, int sizeY, char title[]) {
   if (isEven(sizeX) == 4 && isEven(sizeY) == 4) {
