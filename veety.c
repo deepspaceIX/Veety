@@ -9,6 +9,10 @@ int g_cursor_y = 1;
 const char g_cursor_char = '^';
 char g_cursor_color[] = "0;31";
 
+
+float slopeEYO = 1;
+
+
 char g_win_character_cords[20000];
 char g_cursor_clickpoints[5000];
 int g_win_characters_count = 0;
@@ -128,21 +132,41 @@ int getWorkspace() {
   return workspace;
 }
 
-void drawLine(slope, intercept) {
+void drawLine(char axis, float slope, int posX, int posY) {
   char lineCharacter = '+';
-  if (slope==0) {
-    lineCharacter = '|';
-  } else if (slope < 0) {
-    lineCharacter = '\\';
-  } else if (slope > 0) {
-    lineCharacter = '/';
+  if (axis == 'y') {
+    if (slope==0) {
+      lineCharacter = '-';
+    } else if (slope < 0) {
+      lineCharacter = '/';
+    } else if (slope > 0) {
+      lineCharacter = '\\';
+    }
+  } else if (axis == 'x') {
+    if (slope == 0) {
+      lineCharacter = '|';
+    } else if (slope > 0) {
+      lineCharacter = '/';
+    } else if (slope < 0) {
+      lineCharacter = '\\';
+    }
   }
-  printf("%d", g_win_sizeY);
+  
   int i;
   for (i=0; i<=g_win_sizeY; i++) {
-    int yCord = (i*slope) + intercept;
-    drawCharacter(lineCharacter, i, yCord, 0);
+    int yCord = (i*slope*-1) + posY;
+    int xCord = (i*slope*-1) + posX;
+    if (axis == 'y') {
+      drawCharacter(lineCharacter, posX+i, yCord, 0);
+    } else if(axis == 'x') {
+      drawCharacter(lineCharacter, xCord, posY+i, 0);
+    }
+    
   } 
+}
+
+void TextBox(char placeHolder[], int posX, int posY) {
+  
 }
 
 //Shelly functions
@@ -228,6 +252,11 @@ void window(int sizeX, int sizeY, char title[]) {
   }
   if (c == 's') {
     g_cursor_y += 1;
+  }
+  if (c=='+') {
+    slopeEYO += 0.5;
+  } else if (c=='-') {
+    slopeEYO -= 0.5;
   }
   if (c == ' ') {
     int o;
