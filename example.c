@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "veety.c"
+
 int main() {
-  int i;
-  for (i = 0; i >= i; i++) {
+  while (0==0) {
     int workspace = getWorkspace();
     startMoros();
     if (workspace == 1) {
@@ -13,9 +13,9 @@ int main() {
     } else {
       button(25, 6, "GRAPH");
       drawString("Testing", 1, 1, 0);
-      drawLine(1, 0);
+      drawLine('y', slopeEYO, 0, 10);
     }
-    window(50, 26, "Moros");
+    window(50, 26, "main.c");
     getInput();
   }
   return 0;
