@@ -20,6 +20,7 @@ char g_win_current_window[100];
 int workspace = 0;
 int disableBack = 0;
 
+int whyIsntThisWorking = 0;
 int isEven(int num) {
   if (num % 2 == 0)
     return 4;
@@ -138,9 +139,9 @@ void drawLine(char axis, float slope, int posX, int posY) {
     if (slope==0) {
       lineCharacter = '-';
     } else if (slope < 0) {
-      lineCharacter = '/';
-    } else if (slope > 0) {
       lineCharacter = '\\';
+    } else if (slope > 0) {
+      lineCharacter = '/';
     }
   } else if (axis == 'x') {
     if (slope == 0) {
