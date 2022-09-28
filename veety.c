@@ -9,12 +9,13 @@ int g_cursor_y = 1;
 const char g_cursor_char = '^';
 char g_cursor_color[] = "0;31";
 
-
+int currentTextBox = 0;
 float slopeEYO = 1;
 
 
 char g_win_character_cords[20000];
 char g_cursor_clickpoints[5000];
+char g_cursor_textboxpoints[5000];
 int g_win_characters_count = 0;
 char g_win_current_window[100];
 int workspace = 0;
@@ -57,7 +58,16 @@ void addClickpoint(int xCord, int yCord) {
   }
 }
 
-void drawCharacter(char Character, int xCord, int yCord, int button) {
+void addTextBoxPoint(int xCord, int yCord) {
+  if (xCord != 0 && yCord !=0) {
+    int length = string_length(g_cursor_textboxpoints);
+
+    g_cursor_textboxpoints[length] = xCord;
+    g_cursor_textboxpoints[length + 1] = yCord;
+  }
+}
+
+void drawCharacter(char Character, int xCord, int yCord) {
   if (xCord != 0 && yCord != 0) {
     int length = string_length(g_win_character_cords);
 
@@ -65,18 +75,59 @@ void drawCharacter(char Character, int xCord, int yCord, int button) {
     g_win_character_cords[length + 1] = xCord;
     g_win_character_cords[length + 2] = yCord;
     g_win_characters_count++;
-    if (button == 1) {
-      addClickpoint(xCord, yCord);
-    }
   }
 }
 
-void drawString(char string[], int xCord, int yCord, int button) {
+void drawCharacterClickpoint(char Character, int xCord, int yCord) {
+  if (xCord != 0 && yCord != 0) {
+    int length = string_length(g_win_character_cords);
+
+    g_win_character_cords[length] = Character;
+    g_win_character_cords[length + 1] = xCord;
+    g_win_character_cords[length + 2] = yCord;
+    g_win_characters_count++;
+
+    addClickpoint(xCord, yCord);
+  }
+}
+
+void drawCharacterTextBox(char Character, int xCord, int yCord) {
+    if (xCord != 0 && yCord != 0) {
+    int length = string_length(g_win_character_cords);
+
+    g_win_character_cords[length] = Character;
+    g_win_character_cords[length + 1] = xCord;
+    g_win_character_cords[length + 2] = yCord;
+    g_win_characters_count++;
+
+    addTextBoxPoint(xCord, yCord);
+  }
+}
+
+void drawString(char string[], int xCord, int yCord) {
   int stringLength = string_length(string);
   int p;
 
   for (p = 0; p <= stringLength - 1; p++) {
-    drawCharacter(string[p], xCord + p, yCord, button);
+    drawCharacter(string[p], xCord + p, yCord);
+  }
+}
+
+void drawStringClickpoint(char string[], int xCord, int yCord) {
+  int stringLength = string_length(string);
+  int p;
+
+  for (p = 0; p <= stringLength - 1; p++) {
+    drawCharacterClickpoint(string[p], xCord + p, yCord);
+  }
+}
+
+void drawStringTextBox(char string[], int xCord, int yCord) {
+  int stringLength = string_length(string);
+  int p;
+
+  for (p = 0; p <= stringLength - 1; p++) {
+    drawCharacterTextBox(string[p], xCord + p, yCord);
   }
 }
 
@@ -85,18 +136,18 @@ void button(int xCord, int yCord, char centerText[]) {
   int centerTextLength = string_length(centerText);
 
   for (i = 0; i < centerTextLength + 4; i++) {
-    drawCharacter('=', xCord + i, yCord, 1);
+    drawCharacterClickpoint('=', xCord + i, yCord);
   }
-  drawCharacter('=', xCord, yCord + 1, 1);
-  drawCharacter(' ', xCord + 1, yCord + 1, 1);
-  drawString(centerText, xCord + 2, yCord + 1, 1);
-  drawCharacter(' ', centerTextLength + xCord + 2, yCord + 1, 1);
-  drawCharacter('=', xCord + centerTextLength + 3, yCord + 1, 1);
+  drawCharacterClickpoint('=', xCord, yCord + 1);
+  drawCharacterClickpoint(' ', xCord + 1, yCord + 1);
+  drawStringClickpoint(centerText, xCord + 2, yCord + 1);
+  drawCharacterClickpoint(' ', centerTextLength + xCord + 2, yCord + 1);
+  drawCharacterClickpoint('=', xCord + centerTextLength + 3, yCord + 1);
 
   for (i = 0; i < centerTextLength + 4; i++) {
-    drawCharacter('=', xCord + i, yCord + 2, 1);
+    drawCharacterClickpoint('=', xCord + i, yCord + 2);
   }
-  drawCharacter(' ', centerTextLength + 4, yCord + 2, 1);
+  drawCharacterClickpoint(' ', centerTextLength + 4, yCord + 2);
 }
 
 void cursor() {
@@ -113,7 +164,7 @@ void cursor() {
     }
   }
 
-  drawCharacter(charCursorIcon, g_cursor_x, g_cursor_y, 0);
+  drawCharacter(charCursorIcon, g_cursor_x, g_cursor_y);
 }
 
 void clearCharacterMemory() {
@@ -158,16 +209,31 @@ void drawLine(char axis, float slope, int posX, int posY) {
     int yCord = (i*slope*-1) + posY;
     int xCord = (i*slope*-1) + posX;
     if (axis == 'y') {
-      drawCharacter(lineCharacter, posX+i, yCord, 0);
+      drawCharacter(lineCharacter, posX+i, yCord);
     } else if(axis == 'x') {
-      drawCharacter(lineCharacter, xCord, posY+i, 0);
+      drawCharacter(lineCharacter, xCord, posY+i);
     }
     
   } 
 }
 
 void TextBox(char placeHolder[], int posX, int posY) {
-  
+  int i;
+  int centerTextLength = string_length(placeHolder);
+
+  for (i = 0; i < centerTextLength + 4; i++) {
+    drawCharacterTextBox('-', posX + i, posY);
+  }
+  drawCharacterTextBox('~', posX, posY + 1);
+  drawCharacterTextBox(' ', posX + 1, posY + 1);
+  drawStringTextBox(placeHolder, posX + 2, posY + 1);
+  drawCharacterTextBox(' ', centerTextLength + posX + 2, posY + 1);
+  drawCharacterTextBox('~', posX + centerTextLength + 3, posY + 1);
+
+  for (i = 0; i < centerTextLength + 4; i++) {
+    drawCharacterTextBox('-', posX + i, posY + 2);
+  }
+  drawCharacterTextBox(' ', centerTextLength + 4, posY + 2);
 }
 
 //Shelly functions
@@ -267,6 +333,8 @@ void window(int sizeX, int sizeY, char title[]) {
     for (o = 0; o <= length - 1; o += 2) {
       int cordXEYO = g_cursor_clickpoints[o - 2];
       int cordYEYO = g_cursor_clickpoints[o - 1];
+      int cordXEYO2 = g_cursor_textboxpoints[o - 2];
+      int cordYEYO2 = g_cursor_textboxpoints[o - 1];
       if (cordXEYO == g_cursor_x && cordYEYO == g_cursor_y) {
         workspace++;
       }
@@ -275,10 +343,11 @@ void window(int sizeX, int sizeY, char title[]) {
   clearCharacterMemory();
 }
 
-void startMoros() {
+void startVeety() {
   cursor();
 }
 
 void getInput() { 
   scanf("%c", &c);
 }
+
