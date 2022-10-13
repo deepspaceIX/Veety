@@ -1,3 +1,4 @@
+
 int g_win_sizeX = 10;
 int g_win_sizeY = 10;
 char g_win_title[100];
@@ -9,6 +10,7 @@ const char g_cursor_char = '^';
 char g_cursor_color[] = "0;31";
 
 int currentTextBox = 0;
+int totalTextBoxes = 0;
 float slopeEYO = 1;
 int sizeXTitle;
 int sizeYTitle;
@@ -20,23 +22,22 @@ int g_win_characters_count = 0;
 int workspace = 0;
 int disableBack = 0;
 
-int isEven(int num)
-{
+char g_win_textBoxTexts[3000];
+
+int isEven(int num){
     if (num % 2 == 0)
         return 4;
     else
         return 3;
 }
 
-void append_string(char * str, char c)
-{
+void append_string(char * str, char c){
     for (; * str; str++);
     * str++ = c;
     * str++ = 0;
 }
 
-int string_length(char string[])
-{
+int string_length(char string[]){
     int s = 0;
     int t = 0;
     char blankChar[] = "";
@@ -50,28 +51,27 @@ int string_length(char string[])
     return t;
 }
 
-void addClickpoint(int xCord, int yCord)
-{
-    if (xCord != 0 && yCord != 0) {
+//Veety Functions
+void addClickpoint(int xCord, int yCord) {
+  if(xCord != 0 && yCord != 0) {
         int length = string_length(g_cursor_clickpoints);
 
         g_cursor_clickpoints[length] = xCord;
         g_cursor_clickpoints[length + 1] = yCord;
-    }
+  }
 }
 
-void addTextBoxPoint(int xCord, int yCord)
-{
+void addTextBoxPoint(int xCord, int yCord, int textBoxID){
     if (xCord != 0 && yCord !=0) {
         int length = string_length(g_cursor_textboxpoints);
 
         g_cursor_textboxpoints[length] = xCord;
         g_cursor_textboxpoints[length + 1] = yCord;
+        g_cursor_textboxpoints[length + 2] = textBoxID;
     }
 }
 
-void drawCharacter(char Character, int xCord, int yCord)
-{
+void drawCharacter(char Character, int xCord, int yCord){
     if (xCord != 0 && yCord != 0) {
         int length = string_length(g_win_character_cords);
 
@@ -82,8 +82,7 @@ void drawCharacter(char Character, int xCord, int yCord)
     }
 }
 
-void drawCharacterClickpoint(char Character, int xCord, int yCord)
-{
+void drawCharacterClickpoint(char Character, int xCord, int yCord){
     if (xCord != 0 && yCord != 0) {
         int length = string_length(g_win_character_cords);
 
@@ -96,8 +95,7 @@ void drawCharacterClickpoint(char Character, int xCord, int yCord)
     }
 }
 
-void drawCharacterTextBox(char Character, int xCord, int yCord)
-{
+void drawCharacterTextBox(char Character, int xCord, int yCord, int textBoxID){
     if (xCord != 0 && yCord != 0) {
         int length = string_length(g_win_character_cords);
 
@@ -106,12 +104,11 @@ void drawCharacterTextBox(char Character, int xCord, int yCord)
         g_win_character_cords[length + 2] = yCord;
         g_win_characters_count++;
 
-        addTextBoxPoint(xCord, yCord);
+        addTextBoxPoint(xCord, yCord, textBoxID);
     }
 }
 
-void drawString(char string[], int xCord, int yCord)
-{
+void drawString(char string[], int xCord, int yCord){
     int stringLength = string_length(string);
     int p;
 
@@ -120,8 +117,7 @@ void drawString(char string[], int xCord, int yCord)
     }
 }
 
-void drawStringClickpoint(char string[], int xCord, int yCord)
-{
+void drawStringClickpoint(char string[], int xCord, int yCord){
     int stringLength = string_length(string);
     int p;
 
@@ -130,18 +126,16 @@ void drawStringClickpoint(char string[], int xCord, int yCord)
     }
 }
 
-void drawStringTextBox(char string[], int xCord, int yCord)
-{
+void drawStringTextBox(char string[], int xCord, int yCord, int textBoxID){
     int stringLength = string_length(string);
     int p;
 
     for (p = 0; p <= stringLength - 1; p++) {
-        drawCharacterTextBox(string[p], xCord + p, yCord);
+        drawCharacterTextBox(string[p], xCord + p, yCord, textBoxID);
     }
 }
 
-void button(int xCord, int yCord, char centerText[])
-{
+void button(int xCord, int yCord, char centerText[]){
     int i;
     int centerTextLength = string_length(centerText);
 
@@ -160,8 +154,7 @@ void button(int xCord, int yCord, char centerText[])
     drawCharacterClickpoint(' ', centerTextLength + 4, yCord + 2);
 }
 
-void cursor()
-{
+void cursor(){
     int length = string_length(g_win_character_cords);
     int p;
 
@@ -178,8 +171,15 @@ void cursor()
     drawCharacter(charCursorIcon, g_cursor_x, g_cursor_y);
 }
 
-void clearCharacterMemory()
-{
+const char* returnTextBoxText(textBoxID){
+  
+}
+
+void addTextBoxText(){
+  
+}
+
+void clearCharacterMemory(){
     int i;
     for (i = 0; i < 50000; ++i)
         g_win_character_cords[i] = 0;
@@ -187,21 +187,20 @@ void clearCharacterMemory()
         g_cursor_clickpoints[i] = 0;
     for (i = 0; i < 5000; ++i)
         g_cursor_textboxpoints[i] = 0;
+      
     g_win_characters_count = 0;
+    totalTextBoxes = 0;
 }
 
-void disableBackFucntion()
-{
+void disableBackFucntion(){
     disableBack = 1;
 }
 
-int getWorkspace()
-{
+int getWorkspace(){
     return workspace;
 }
 
-void drawLine(char axis, float slope, int posX, int posY)
-{
+void drawLine(char axis, float slope, int posX, int posY){
     char lineCharacter = '+';
     if (axis == 'y') {
         if (slope==0) {
@@ -234,29 +233,27 @@ void drawLine(char axis, float slope, int posX, int posY)
     }
 }
 
-void TextBox(char placeHolder[], int posX, int posY)
-{
+void TextBox(char placeHolder[], int posX, int posY){
     int i;
     int centerTextLength = string_length(placeHolder);
+    totalTextBoxes++;
 
     for (i = 0; i < centerTextLength + 4; i++) {
-        drawCharacterTextBox('-', posX + i, posY);
+        drawCharacterTextBox('-', posX + i, posY, totalTextBoxes);
     }
-    drawCharacterTextBox('~', posX, posY + 1);
-    drawCharacterTextBox(' ', posX + 1, posY + 1);
-    drawStringTextBox(placeHolder, posX + 2, posY + 1);
-    drawCharacterTextBox(' ', centerTextLength + posX + 2, posY + 1);
-    drawCharacterTextBox('~', posX + centerTextLength + 3, posY + 1);
+    drawCharacterTextBox('~', posX, posY + 1, totalTextBoxes);
+    drawCharacterTextBox(' ', posX + 1, posY + 1,totalTextBoxes);
+    drawStringTextBox(placeHolder, posX + 2, posY + 1,totalTextBoxes);
+    drawCharacterTextBox(' ', centerTextLength + posX + 2, posY + 1,totalTextBoxes);
+    drawCharacterTextBox('~', posX + centerTextLength + 3, posY + 1,totalTextBoxes);
 
     for (i = 0; i < centerTextLength + 4; i++) {
-        drawCharacterTextBox('-', posX + i, posY + 2);
+        drawCharacterTextBox('-', posX + i, posY + 2,totalTextBoxes);
     }
-    drawCharacterTextBox(' ', centerTextLength + 4, posY + 2);
+    drawCharacterTextBox(' ', centerTextLength + 4, posY + 2,totalTextBoxes);
 }
 
-//Shelly functions
-void window(int sizeX, int sizeY, char title[])
-{
+void window(int sizeX, int sizeY, char title[]){
     if (isEven(sizeX) == 4) {
         printf("\e[1;1H\e[2J");
         g_win_sizeX = sizeX;
@@ -324,68 +321,82 @@ void window(int sizeX, int sizeY, char title[])
     } else {
         printf("x be even for code to work");
     }
-    if (c == '<') {
-        if (disableBack != 1) {
-            workspace--;
-        }
-    }
-    if (c == 'd') {
-        if (g_cursor_x > sizeXTitle+1) {
-            g_cursor_x = 1;
-        } else {
-            g_cursor_x += 1;
-        }
-    }
-    if (c == 'a') {
-        if (g_cursor_x < 2) {
-            g_cursor_x = sizeXTitle+2;
-        } else {
-            g_cursor_x -= 1;
-        }
-    }
-    if (c == 'w') {
-        if (g_cursor_y < 2) {
-            g_cursor_y = sizeY;
-        } else {
-            g_cursor_y -= 1;
-        }
-    }
-    if (c == 's') {
-        if (g_cursor_y > sizeYTitle-1) {
-            g_cursor_y = 1;
-        } else {
-            g_cursor_y += 1;
-        }
-    }
-    if (c=='+') {
-        slopeEYO += 0.5;
-    } else if (c=='-') {
-        slopeEYO -= 0.5;
-    }
-    if (c == ' ') {
-        int o;
-        int length = string_length(g_cursor_clickpoints);
-
-        for (o = 0; o <= length - 1; o += 2) {
-            int cordXEYO = g_cursor_clickpoints[o - 2];
-            int cordYEYO = g_cursor_clickpoints[o - 1];
-            int cordXEYO2 = g_cursor_textboxpoints[o - 2];
-            int cordYEYO2 = g_cursor_textboxpoints[o - 1];
-            if (cordXEYO == g_cursor_x && cordYEYO == g_cursor_y) {
-                workspace++;
+    if (currentTextBox == 0) {
+      if (c == '<') {
+          if (disableBack != 1) {
+            if (workspace > 0){
+              workspace--;
             }
-        }
+          }
+      }
+      if (c == 'd') {
+          if (g_cursor_x > sizeXTitle+1) {
+              g_cursor_x = 1;
+          } else {
+              g_cursor_x += 1;
+          }
+      }
+      if (c == 'a') {
+          if (g_cursor_x < 2) {
+              g_cursor_x = sizeXTitle+2;
+          } else {
+              g_cursor_x -= 1;
+          }
+      }
+      if (c == 'w') {
+          if (g_cursor_y < 2) {
+              g_cursor_y = sizeY;
+          } else {
+              g_cursor_y -= 1;
+          }
+      }
+      if (c == 's') {
+          if (g_cursor_y > sizeYTitle-1) {
+              g_cursor_y = 1;
+          } else {
+              g_cursor_y += 1;
+          }
+      }
+      if (c=='+') {
+          slopeEYO += 0.5;
+      } else if (c=='-') {
+          slopeEYO -= 0.5;
+      }
+      if (c == ' ') {
+        
+          int o;
+          int length = string_length(g_cursor_clickpoints);
+          int length2 = string_length(g_cursor_textboxpoints);
+  
+          for (o = 0; o <= length - 1; o += 2) {
+              int cordXEYO = g_cursor_clickpoints[o - 2];
+              int cordYEYO = g_cursor_clickpoints[o - 1];
+              if (cordXEYO == g_cursor_x && cordYEYO == g_cursor_y) {
+                  workspace++;
+              }
+              
+          }
+        
+          for (o = -1; o <= length2; o += 3) {
+              int cordXEYO = g_cursor_textboxpoints[o-2];
+              int cordYEYO = g_cursor_textboxpoints[o-1];
+              int textBoxID = g_cursor_textboxpoints[o];
+  
+              if (cordXEYO == g_cursor_x && cordYEYO == g_cursor_y) {
+                  currentTextBox = textBoxID;
+              } 
+          }
+      }
     }
-
     clearCharacterMemory();
 }
 
-void startVeety()
-{
+void startVeety(){
+  if (currentTextBox == 0) {
     cursor();
+  }
 }
 
-void getInput()
-{
+void getInput(){
     scanf("%c", &c);
 }
