@@ -1,4 +1,3 @@
-
 int g_win_sizeX = 10;
 int g_win_sizeY = 10;
 char g_win_title[100];
@@ -175,8 +174,31 @@ const char* returnTextBoxText(textBoxID){
   
 }
 
-void addTextBoxText(){
-  
+void addTextBoxText(char string[50]){
+  int i;
+  int textBoxTextLength = string_length(g_win_textBoxTexts);
+  int stringLength = string_length(string);
+  int foundStart = 0;
+  for (i=0; i<=textBoxTextLength; i++)
+    {
+      if (g_win_textBoxTexts[i] == '`') {
+        foundStart = 1;
+      }
+    }
+  if (foundStart != 1) {
+    g_win_textBoxTexts[0] = '`';
+  }
+  if (foundStart == 1) {
+    if (g_win_textBoxTexts[textBoxTextLength] != '`') {
+      g_win_textBoxTexts[textBoxTextLength] = '`';
+    }
+  }
+  int textBoxTextLength2 = string_length(g_win_textBoxTexts);
+  for (i=textBoxTextLength2; i<=stringLength; i++){
+    if (i!=textBoxTextLength2) {
+      g_win_textBoxTexts[i] = string[i];
+    }
+  }
 }
 
 void clearCharacterMemory(){
