@@ -188,17 +188,18 @@ void addTextBoxText(char string[50]){
   if (foundStart != 1) {
     g_win_textBoxTexts[0] = '`';
   }
+  
   if (foundStart == 1) {
-    if (g_win_textBoxTexts[textBoxTextLength] != '`') {
+    if (g_win_textBoxTexts[textBoxTextLength-1] != '`') {
       g_win_textBoxTexts[textBoxTextLength] = '`';
     }
   }
+  
   int textBoxTextLength2 = string_length(g_win_textBoxTexts);
-  for (i=textBoxTextLength2; i<=stringLength; i++){
-    if (i!=textBoxTextLength2) {
-      g_win_textBoxTexts[i] = string[i];
-    }
+  for (i=textBoxTextLength2; i<=stringLength+textBoxTextLength2; i++){
+    g_win_textBoxTexts[i] = string[i];
   }
+  
 }
 
 void clearCharacterMemory(){
@@ -209,6 +210,8 @@ void clearCharacterMemory(){
         g_cursor_clickpoints[i] = 0;
     for (i = 0; i < 5000; ++i)
         g_cursor_textboxpoints[i] = 0;
+    for (i = 0; i < 3000; ++i)
+        g_win_textBoxTexts[i] = 0;
       
     g_win_characters_count = 0;
     totalTextBoxes = 0;
@@ -261,7 +264,7 @@ void TextBox(char placeHolder[], int posX, int posY){
     totalTextBoxes++;
 
     for (i = 0; i < centerTextLength + 4; i++) {
-        drawCharacterTextBox('-', posX + i, posY, totalTextBoxes);
+      drawCharacterTextBox('-', posX + i, posY, totalTextBoxes);
     }
     drawCharacterTextBox('~', posX, posY + 1, totalTextBoxes);
     drawCharacterTextBox(' ', posX + 1, posY + 1,totalTextBoxes);
@@ -422,3 +425,4 @@ void startVeety(){
 void getInput(){
     scanf("%c", &c);
 }
+
