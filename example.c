@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "veety.h"
+
 int main(){
   while (0==0) {
     int workspace = getWorkspace();
@@ -8,45 +9,25 @@ int main(){
     TextBox("Input Equation", 13, 6);
     TextBox("Secondary Input Test", 13, 20);
     window(26, 26, "Graphing Calculator");
-    //printf("%d, %d", currentTextBox, workspace); 
     
     addTextBoxText("TEST1");
     addTextBoxText("TEST2");
     addTextBoxText("TEST3");
     addTextBoxText("TEST4");
-    
-    int i;
-    for (i=0;i<string_length(g_win_textBoxTexts); i++) {
-      printf("%c", g_win_textBoxTexts[i]);
-    }
-    printf("\n");
+
     editTextBoxText(0, "TEST A");
-    
-    for (i=0;i<string_length(g_win_textBoxTexts); i++) {
-      printf("%c", g_win_textBoxTexts[i]);
-    }
-
-    printf("\n");
     editTextBoxText(0, "TEST BA");
-
-    for (i=0;i<string_length(g_win_textBoxTexts); i++) {
-      printf("%c", g_win_textBoxTexts[i]);
-    }
-    
-    printf("\n");
     editTextBoxText(1, "TEST C");
-
-    for (i=0;i<string_length(g_win_textBoxTexts); i++) {
-      printf("%c", g_win_textBoxTexts[i]);
-    }
-
-    printf("\n");
     editTextBoxText(3, "TEST D");
+    editTextBoxText(2, "TEST E");
+    editTextBoxText(3, "TEST ABCD");
+    editTextBoxText(1, "TEST BAA");
 
-    for (i=0;i<string_length(g_win_textBoxTexts); i++) {
-      printf("%c", g_win_textBoxTexts[i]);
-    }
-    
+    printf("%s\n",returnTextBoxText(0, g_win_textBoxTexts));
+    printf("%s\n",returnTextBoxText(1, g_win_textBoxTexts));
+    printf("%s\n",returnTextBoxText(2, g_win_textBoxTexts));
+    printf("%s\n",returnTextBoxText(3, g_win_textBoxTexts));
+        
     getInput();
   }
   return 0;
