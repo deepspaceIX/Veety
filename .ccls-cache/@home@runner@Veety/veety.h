@@ -1,4 +1,3 @@
-
 int g_win_sizeX = 10;
 int g_win_sizeY = 10;
 char g_win_title[100];
@@ -23,6 +22,8 @@ int workspace = 0;
 int disableBack = 0;
 
 char g_win_textBoxTexts[3000];
+
+char returnString[50]="0000000000000000000000000000000000000000000000000";
 
 int isEven(int num){
     if (num % 2 == 0)
@@ -91,6 +92,140 @@ void drawCharacterClickpoint(char Character, int xCord, int yCord){
 
         addClickpoint(xCord, yCord);
     }
+}
+
+const char* returnTextBoxText(int textBoxID, char textBoxTexts[]){
+
+  int i;
+    for (i = 0; i <= 50; ++i){
+     returnString[i] = 0; 
+    }
+        
+  
+  int textBoxTextLength = string_length(textBoxTexts);
+  int textPosition = 1;
+  int textBoxesDetected = -1;
+  for (i=0; i<=textBoxTextLength; i++){
+    if (g_win_textBoxTexts[i] == '`'){
+      textBoxesDetected++;
+      if (textBoxID == textBoxesDetected) {
+        textPosition = i;
+      }
+    }
+  }
+
+
+  
+  int stopChecking = 0;
+  for (i=1; i<=50; i++) {
+      if (g_win_textBoxTexts[textPosition+i] == '`') {
+        stopChecking = 1;
+      } else if(stopChecking==0) {
+
+        returnString[i-1] = g_win_textBoxTexts[textPosition+i];
+      }
+      
+    
+  }
+  
+  return returnString;
+}
+
+void addTextBoxText(char string[50]){
+  int i;
+  int textBoxTextLength = string_length(g_win_textBoxTexts);
+  int stringLength = string_length(string);
+  int foundStart = 0;
+  for (i=0; i<=textBoxTextLength; i++)
+    {
+      if (g_win_textBoxTexts[i] == '`') {
+        foundStart = 1;
+      }
+    }
+  if (foundStart != 1) {
+    g_win_textBoxTexts[0] = '`';
+  }
+  
+  if (foundStart == 1) {
+    if (g_win_textBoxTexts[textBoxTextLength-1] != '`') {
+      g_win_textBoxTexts[textBoxTextLength] = '`';
+    }
+  }
+  int textBoxTextLength2 = string_length(g_win_textBoxTexts);
+  int n = 0;
+  for (i=textBoxTextLength2; i<=stringLength+textBoxTextLength2; i++){
+    g_win_textBoxTexts[i] = string[n];
+    n++;
+  }
+}
+
+void editTextBoxText(int textBoxID, char newString[]){
+  int i;
+  int t=-1;
+  int textBoxPosition = 0;
+  int totalTextBoxesFound = -1;
+
+  //this gets thetotal number of textboxes
+  for (i=0;i<=string_length(g_win_textBoxTexts); i++){
+    if (g_win_textBoxTexts[i] == '`'){
+      totalTextBoxesFound++;
+    }
+  }
+
+  //This finds the position of where the new text is going to be placed.
+  for (i=0; i<=string_length(g_win_textBoxTexts); i++){
+    if (g_win_textBoxTexts[i] == '`'){
+      t++;
+      if (t==textBoxID){
+        textBoxPosition = i;
+      }
+    }
+  }
+  int newStringLength = string_length(newString)+1;
+  //This gets the position of where the rest of the textboxtexts are going to be placed.
+  int oldStringNewPosition = textBoxPosition + newStringLength;
+  int oldStringPosition = 0;
+
+  //This stores the rest of the old string past the textBoxPosition point
+  char oldString[1000];
+  //This gets the position of the rest of the old string
+  int stopActive = 0;
+  for (i=textBoxPosition+1; i<=string_length(g_win_textBoxTexts); i++){
+    if (g_win_textBoxTexts[i]=='`' && stopActive == 0){
+      oldStringPosition = i;
+      stopActive = 1;
+    }
+  }
+
+  //This stores all the characters
+  t=-1;
+  for (i=oldStringPosition; i<=string_length(g_win_textBoxTexts); i++){
+    t++;
+    oldString[t] = g_win_textBoxTexts[i];
+  }
+  
+  //This moves all of the old string characters to the new position
+  if (totalTextBoxesFound!=textBoxID) {
+      t=-1;
+  for (i=oldStringNewPosition; i<=string_length(g_win_textBoxTexts) + newStringLength + 4; i++) {
+    t++;
+    g_win_textBoxTexts[i] = oldString[t];
+  }
+  }
+
+
+    t=-1;
+    for (i = textBoxPosition; i <= string_length(g_win_textBoxTexts); i++) {
+      t++;
+      g_win_textBoxTexts[i+1] = newString[t];
+    }
+if (totalTextBoxesFound!=textBoxID){
+    t=-1;
+    for (i=oldStringNewPosition; i<=oldStringNewPosition+string_length(newString) + 30; i++){
+      t++;
+      g_win_textBoxTexts[i] = oldString[t];
+    }
+  }
 }
 
 void drawCharacterTextBox(char Character, int xCord, int yCord, int textBoxID){
@@ -169,117 +304,7 @@ void cursor(){
     drawCharacter(charCursorIcon, g_cursor_x, g_cursor_y);
 }
 
-const char* returnTextBoxText(textBoxID){
-  int i;
-  int textBoxTextLength = string_length(g_win_textBoxTexts);
-  int textPosition = 1;
-  int textBoxesDetected = -1;
-  for (i=0; i<=textBoxTextLength; i++){
-    if (g_win_textBoxTexts[i] == '`'){
-      textBoxesDetected++;
-      if (textBoxID == textBoxesDetected) {
-        textPosition = i;
-      }
-    }
-  }
 
-  char returnString[50];
-  int stopChecking = 0;
-  for (i=0; i<=50; i++) {
-    if (g_win_textBoxTexts[textPosition+i] == '`') {
-      stopChecking = 1;
-    } else if (stopChecking == 0) {
-      returnString[i] = g_win_textBoxTexts[textPosition+i];
-    }
-  }
-
-  return returnString;
-}
-
-void addTextBoxText(char string[50]){
-  int i;
-  int textBoxTextLength = string_length(g_win_textBoxTexts);
-  int stringLength = string_length(string);
-  int foundStart = 0;
-  for (i=0; i<=textBoxTextLength; i++)
-    {
-      if (g_win_textBoxTexts[i] == '`') {
-        foundStart = 1;
-      }
-    }
-  if (foundStart != 1) {
-    g_win_textBoxTexts[0] = '`';
-  }
-  
-  if (foundStart == 1) {
-    if (g_win_textBoxTexts[textBoxTextLength-1] != '`') {
-      g_win_textBoxTexts[textBoxTextLength] = '`';
-    }
-  }
-  int textBoxTextLength2 = string_length(g_win_textBoxTexts);
-  int n = 0;
-  for (i=textBoxTextLength2; i<=stringLength+textBoxTextLength2; i++){
-    g_win_textBoxTexts[i] = string[n];
-    n++;
-  }
-}
-
-void editTextBoxText(int textBoxID, char newString[]){
-  int i;
-  int t=-1;
-  int textBoxPosition = 0;
-
-  //This finds the position of where the new text is going to be placed.
-  for (i=0; i<=string_length(g_win_textBoxTexts); i++){
-    if (g_win_textBoxTexts[i] == '`'){
-      t++;
-      if (t==textBoxID){
-        textBoxPosition = i;
-      }
-    }
-  }
-  int newStringLength = string_length(newString)+1;
-  //This gets the position of where the rest of the textboxtexts are going to be placed.
-  int oldStringNewPosition = textBoxPosition + newStringLength;
-  int oldStringPosition = 0;
-
-  //This stores the rest of the old string past the textBoxPosition point
-  char oldString[1000];
-  //This gets the position of the rest of the old string
-  int stopActive = 0;
-  for (i=textBoxPosition+1; i<=string_length(g_win_textBoxTexts); i++){
-    if (g_win_textBoxTexts[i]=='`' && stopActive == 0){
-      oldStringPosition = i;
-      stopActive = 1;
-    }
-  }
-
-  //This stores all the characters
-  t=-1;
-  for (i=oldStringPosition; i<=string_length(g_win_textBoxTexts); i++){
-    t++;
-    oldString[t] = g_win_textBoxTexts[i];
-  }
-  
-  //This moves all of the old string characters to the new position
-  t=-1;
-  for (i=oldStringNewPosition; i<=string_length(g_win_textBoxTexts) + newStringLength + 4; i++) {
-    t++;
-    g_win_textBoxTexts[i] = oldString[t];
-  }
-
-    t=-1;
-    for (i = textBoxPosition; i <= string_length(g_win_textBoxTexts); i++) {
-      t++;
-      g_win_textBoxTexts[i+1] = newString[t];
-    }
-
-    t=-1;
-    for (i=oldStringNewPosition; i<=oldStringNewPosition+string_length(newString) + 30; i++){
-      t++;
-      g_win_textBoxTexts[i] = oldString[t];
-    }
-}
 
 void clearCharacterMemory(){
     int i;
@@ -355,6 +380,8 @@ void TextBox(char placeHolder[], int posX, int posY){
         drawCharacterTextBox('-', posX + i, posY + 2,totalTextBoxes);
     }
     drawCharacterTextBox(' ', centerTextLength + 4, posY + 2,totalTextBoxes);
+
+    addTextBoxText(placeHolder);
 }
 
 void window(int sizeX, int sizeY, char title[]){
@@ -491,7 +518,7 @@ void window(int sizeX, int sizeY, char title[]){
               } 
           }
       }
-    }
+    } else{}
     clearCharacterMemory();
 }
 
@@ -502,5 +529,5 @@ void startVeety(){
 }
 
 void getInput(){
-    scanf("%c", &c);
+  scanf("%c", &c);
 }
