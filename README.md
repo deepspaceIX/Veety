@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a><img src="[https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.png](https://i.imgur.com/yjolhnx.png)" alt="Markdownify" width="200"></a>
+  <a><img src="[https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.png](https://i.imgur.com/yjolhnx.png)" width="200"></a>
   <br>
   Veety!
   <br>
