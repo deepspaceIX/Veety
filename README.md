@@ -9,12 +9,11 @@
 <h4 align="center">A easy to use, text-based gui written entirely in C, standard library needed.</h4>
 <div align="center">
 <h2>How to use?</h2>
-	<h3>Download the veety.h file into your project folder and at the top put: ```bash
-		#include "veety.h"
-		``` as well as 
+	<h3>Download the veety.h file into your project folder and at the top put:</h3>
 		```bash
-		#include <stdio.h>
-		```</h3>
+			#include <stdio.h>
+			#include "veety.h"
+		``` 
 		<h3>The then you can scroll through endless lines of code in the Veety.h file to find which functions you need to use. Also look at the example to see how things should be layed out</h3>
 </div>
 
