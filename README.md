@@ -1,7 +1,7 @@
-
-<h1 align="center" display="inline-block">
+<h1 align="center">
   <br>
-  <a href="https://i.imgur.com/yjolhnx.png" alt="Veety" width="200"></a>
+  <a><img src="[https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.png](https://i.imgur.com/yjolhnx.png)" alt="Markdownify" width="200"></a>
+  <br>
   Veety!
   <br>
 </h1>
@@ -11,9 +11,9 @@
 <h2>How to use?</h2>
 	<h3>Download the veety.h file into your project folder and at the top put:</h3>
 		```bash
-			#include <stdio.h>
-			#include "veety.h"
-		``` 
+			$#include <stdio.h>
+			$#include "veety.h"
+		```
 		<h3>The then you can scroll through endless lines of code in the Veety.h file to find which functions you need to use. Also look at the example to see how things should be layed out</h3>
 </div>
 
