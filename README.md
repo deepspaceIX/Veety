@@ -10,15 +10,19 @@
 <div align="center">
 <h2>How to use?</h2>
 	<h3>Download the veety.h file into your project folder and at the top put:</h3>
-		```bash
-			$#include <stdio.h>
-			$#include "veety.h"
-		```
+		
+
+</div>
+
+```bash
+$#include <stdio.h>
+$#include "veety.h"
+```
+		
+<div align="center">
 		<h3>The then you can scroll through endless lines of code in the Veety.h file to find which functions you need to use. Also look at the example to see how things should be layed out</h3>
 </div>
 
-
-	
 <h1 align="center">
   <br>
   <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.png" alt="Markdownify" width="200"></a>
