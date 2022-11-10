@@ -1,4 +1,3 @@
-#include <stdio.h>
 int g_win_sizeX = 10;
 int g_win_sizeY = 10;
 char g_win_title[100];
