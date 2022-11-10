@@ -12,5 +12,5 @@ Open-sourced text based GUI system written for C programming. Needs C standard l
 
 
 <h1 align="center">
-  <img src="https://imgur.com/a/LTJncSU" width="200px">
-  <hr>
+  <img src="https://i.imgur.com/yjolhnx.png" width="200px">
+ </h1>
