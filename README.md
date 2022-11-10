@@ -1,5 +1,5 @@
 <h1 display = "inline-block">
-  <h1>Veety</h1>
+  Veety
   <img src="https://i.imgur.com/yjolhnx.png" width="100px">
 </a>
 
