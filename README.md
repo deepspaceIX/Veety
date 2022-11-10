@@ -1,8 +1,7 @@
 
-<h1 align="center">
+<h1 align="center" display="inline-block">
   <br>
   <a href="https://i.imgur.com/yjolhnx.png" alt="Veety" width="200"></a>
-  <br>
   Veety!
   <br>
 </h1>
