@@ -1,10 +1,13 @@
+#include <stdio.h>
 int g_win_sizeX = 10;
 int g_win_sizeY = 10;
 char g_win_title[100];
 char c;
+char s[];
 
 int g_cursor_x = 1;
 int g_cursor_y = 1;
+char title[50];
 const char g_cursor_char = '^';
 char g_cursor_color[] = "0;31";
 
@@ -24,6 +27,7 @@ int disableBack = 0;
 char g_win_textBoxTexts[3000];
 
 char returnString[50]="0000000000000000000000000000000000000000000000000";
+int textBoxChanged = 0;
 
 int isEven(int num){
     if (num % 2 == 0)
@@ -94,6 +98,19 @@ void drawCharacterClickpoint(char Character, int xCord, int yCord){
     }
 }
 
+int doesTextBoxExist(int textBoxID) {
+  int i;
+  int totalTextBoxes = -1;
+  for (i=0;i<=string_length(g_win_textBoxTexts);i++){
+    if (g_win_textBoxTexts[i] == '`'){
+      totalTextBoxes++;
+    }
+    if (totalTextBoxes==textBoxID){
+      return 1;
+    }
+  }
+  return 0;
+}
 const char* returnTextBoxText(int textBoxID, char textBoxTexts[]){
 
   int i;
@@ -314,8 +331,6 @@ void clearCharacterMemory(){
         g_cursor_clickpoints[i] = 0;
     for (i = 0; i < 5000; ++i)
         g_cursor_textboxpoints[i] = 0;
-    for (i = 0; i < 3000; ++i)
-        g_win_textBoxTexts[i] = 0;
       
     g_win_characters_count = 0;
     totalTextBoxes = 0;
@@ -350,9 +365,10 @@ void drawLine(char axis, float slope, int posX, int posY){
     }
 
     int i;
+  //draw upper half
     for (i=0; i<=g_win_sizeY; i++) {
-        int yCord = (i*slope*-1) + posY;
-        int xCord = (i*slope*-1) + posX;
+        int yCord = (i*-slope) + posY;
+        int xCord = (i*-slope) + posX;
         if (axis == 'y') {
             drawCharacter(lineCharacter, posX+i, yCord);
         } else if(axis == 'x') {
@@ -360,19 +376,52 @@ void drawLine(char axis, float slope, int posX, int posY){
         }
 
     }
+  //draw lower half
+  for (i=0; i<=g_win_sizeY; i++) {
+        int yCord = (i*slope) + posY;
+        int xCord = (i*slope) + posX;
+        if (axis == 'y') {
+            drawCharacter(lineCharacter, posX-i, yCord);
+        } else if(axis == 'x') {
+            drawCharacter(lineCharacter, xCord, posY-i);
+        }
+
+    }
+
+
 }
 
 void TextBox(char placeHolder[], int posX, int posY){
+    
     int i;
-    int centerTextLength = string_length(placeHolder);
-    totalTextBoxes++;
 
+  
+    totalTextBoxes++;
+    
+    
+
+  if (doesTextBoxExist(totalTextBoxes-1) == 0){
+    addTextBoxText(placeHolder);
+  }
+
+  int centerTextLength = string_length(returnTextBoxText(totalTextBoxes-1, g_win_textBoxTexts));
+
+  const char* receivedString = returnTextBoxText(totalTextBoxes-1, g_win_textBoxTexts);
+
+
+
+
+
+  
     for (i = 0; i < centerTextLength + 4; i++) {
       drawCharacterTextBox('-', posX + i, posY, totalTextBoxes);
     }
     drawCharacterTextBox('~', posX, posY + 1, totalTextBoxes);
     drawCharacterTextBox(' ', posX + 1, posY + 1,totalTextBoxes);
-    drawStringTextBox(placeHolder, posX + 2, posY + 1,totalTextBoxes);
+
+      drawStringTextBox(receivedString, posX + 2, posY + 1,totalTextBoxes);
+
+
     drawCharacterTextBox(' ', centerTextLength + posX + 2, posY + 1,totalTextBoxes);
     drawCharacterTextBox('~', posX + centerTextLength + 3, posY + 1,totalTextBoxes);
 
@@ -381,14 +430,15 @@ void TextBox(char placeHolder[], int posX, int posY){
     }
     drawCharacterTextBox(' ', centerTextLength + 4, posY + 2,totalTextBoxes);
 
-    addTextBoxText(placeHolder);
+    
 }
 
-void window(int sizeX, int sizeY, char title[]){
+void window(){
+  int sizeX = g_win_sizeX;
+  int sizeY = g_win_sizeY;
     if (isEven(sizeX) == 4) {
         printf("\e[1;1H\e[2J");
-        g_win_sizeX = sizeX;
-        g_win_sizeY = sizeY;
+
 
         int sizeXDV2 = sizeX / 2;
         int titleLength = string_length(title);
@@ -522,12 +572,34 @@ void window(int sizeX, int sizeY, char title[]){
     clearCharacterMemory();
 }
 
-void startVeety(){
+void startVeety(int sizeX, int sizeY, char g_title[]){
   if (currentTextBox == 0) {
     cursor();
+  }
+  int i;
+  g_win_sizeX = sizeX;
+  g_win_sizeY = sizeY;
+  for (i=0; i<=50; i++) {
+    title[i] = g_title[i];
   }
 }
 
 void getInput(){
-  scanf("%c", &c);
+  if (textBoxChanged==0){
+    if (currentTextBox == 0){
+      scanf("%c", &c);
+    } else {
+      char temp;
+      printf(">> ");
+      scanf("%c",&temp);
+      scanf("%[^\n]", &s);
+  printf(">> ");
+      textBoxChanged=1;
+      editTextBoxText(currentTextBox-1,s);
+    }
+  } else {
+    textBoxChanged=0;
+    currentTextBox=0;
+    scanf("%c", &c);
+  }
 }
